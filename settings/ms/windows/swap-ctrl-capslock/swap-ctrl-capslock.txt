@@ -1,0 +1,62 @@
+
+Swapping left control and capslock here.
+
+http://www.microsoft.com/whdc/device/input/w2kscan-map.mspx
+
+** Check for existing value:
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
+
+** Verify that no value exists, then run:
+rem reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d 0000000000000000030000003A001D001D003A0000000000 /f
+
+** Remove the 'rem' and run once sure that there's no current value.
+
+Reboot.
+
+*** I actually like this one better
+1D003A00 (caps lock 0x003A) -> (left ctrl 0x001D)
+3A005CE0 (right win 0xE05C) -> (caps lock 0x003A)
+
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d ^
+00000000^
+00000000^
+03000000^
+1D003A00^
+3A005CE0^
+00000000 /f
+
+For Acer Ultrabook.
+29003A00 (caps lock 0x003A) -> (backtick tilde 0x0029)
+1D002900 (backtick tilde 0x0029) -> (left ctrl 0x001D)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d ^
+00000000^
+00000000^
+03000000^
+29003A00^
+1D002900^
+00000000 /f
+
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map"
+
+================================================================================
+download/reference/hardware/pc/keyboard
+	2004-04-09_PC-Scan-Codes.pdf
+	1999-02-23_1.3a_MS_WHQL_scancode.doc
+
+left win   0xE05B
+right win  0xE05C
+app "menu" 0xE05D
+
+caps lock 0x003A
+Space             0x39
+backtick tilde    0x29
+Esc               0x01
+left ctrl  0x001D
+right ctrl 0xE01D
+Left  Alt         0x38
+Right Alt         0xe038
+Num Lock          0x45
+Scroll Lock       0x46
+ F1-F10           0x003B-0x44
+F11-F12           0x57-0x58
+Application       0xE05D
