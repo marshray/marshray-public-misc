@@ -1,0 +1,9 @@
+if $OS == "Windows_NT"
+	if $PATH =~ "/cygdrive"
+		" Cygwin configuration
+		so /cygdrive/c/app/vim/_gvimrc
+	else
+		" MS Windows
+		so c:\app\vim\_gvimrc
+	endif
+endif

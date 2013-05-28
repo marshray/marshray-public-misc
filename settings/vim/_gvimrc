@@ -1,0 +1,51 @@
+scriptencoding utf-8
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" e  tab pages are GUI
+" g  grey-out inactive menu items, rather than not showing them at all
+" m  menu bar
+" r  always have a rh scrollbar
+" L  lh scrollbar is present on vertical splits
+" t  tearoff menu items
+set guioptions=egmrLt
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if $OS == "Windows_NT"
+	if $PATH =~ "/cygdrive"
+		" Cygwin configuration
+		set guifont=Bera\ Sans\ Mono
+	else
+		" MS Windows
+		"set guifont=ProggyCleanTT:h12
+		set guifont=Lucida_Console:h9
+	endif
+else
+	set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+endif
+
+set columns=100
+
+set lines=55
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+highlight StatusLine   gui=reverse
+highlight StatusLineNC gui=reverse guifg=Grey guibg=fg
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set visualbell t_vb=	" disable bells
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Don't use ALT keys for menus.
+" Doesn't stop Alt down-up from setting focus to menubar.
+set winaltkeys=no
+
+" Turns off menu altogether.
+"set guioptions-=m
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+

@@ -1,0 +1,486 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+scriptencoding utf-8
+
+syn on
+
+set nocompatible
+
+set hidden     " A buffer becomes hidden when it is abandoned.
+
+set tabstop=4       " 4-column tabs.
+set softtabstop=0
+set shiftwidth=4
+set noexpandtab     " Use genuine \t tabs.
+set nosmarttab      " Meaningless when sw=ts?
+set autoindent      " Start new lines indented like previous.
+"set cindent         " Indent like for C-language source.
+
+"cpoptions were aABceFs
+"	a   :read sets alternate file name
+"	A	:write
+"	B	backslash has no special meaning in mappings
+"	c	search continues at end of cursor match
+"	e	:@r adds a <CR> to last line
+"	F	:write sets file name for buffer if it doesn't have a name already
+"	s	set buffer options when entering buffer for first time rather than when it was created
+"	$	temporarily show $ at end of changed text
+set cpoptions+=$
+
+"	http://www.vim.org/tips/tip.php?tip_id=330
+set nosmartindent
+set nocindent       " Don't indent like for C-language source.
+set indentexpr=
+filetype indent off
+filetype plugin indent off 
+
+set wrap
+
+" Allow backspacing over autoindent space and the start of the insert.
+set backspace=indent,start
+
+set visualbell t_vb=    " disable bells
+set novisualbell " don't blink
+set noerrorbells " no noises
+
+"set listchars=tab:<Space>,trail:$
+"set listchars=tab:@%,trail:$
+"set list        " show tabs and trailing blanks as indicated by listchars
+
+set ignorecase	" ignore case in search patterns
+set hlsearch    " When there is a previous search pattern, highlight all its matches
+set incsearch   " incremental searching
+
+set helpheight=60
+
+set laststatus=2	" always show the status line
+
+" %<      truncate here if line too long
+" %t      filename only
+" %f      path rel to pwd
+" %h      help buffer flag
+" %m      modified flag
+" %r      readonly flag
+" %l      line number
+" %L      num lines in buffer
+" %v      virtual col number
+" %y      filetype
+"
+set statusline=\ :%nb\ \ %t\ \ [%M%R%H%W%Y]\ \ %<%=%f\ \ C%v\ \ L%l/%L%(\ %)
+
+set diffopt=filler,vertical
+
+set scrolloff=5   " keep this many lines visible
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" dir for :browse is from current buffer
+set browsedir=buffer
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	From http://www.vi-improved.org/vimrc.php.
+
+set clipboard+=unnamed " Share Windows' clipboard.
+
+" Make these not be word dividers.
+set iskeyword+=_,$,@,%
+
+" Alt-y (normal mode) inserts a single char, and then switches back to normal.
+map <A-y> i <ESC>r
+map y   i <ESC>r
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"    C/C++ mode
+
+let c_space_errors=1    " Highlight tabs following spaces and trailing whitespace.
+let c_comment_strings=1 " Highlight strings and numbers inside comments.
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set background=dark
+
+"if &t_Co > 1 " iff terminal supports colors.
+    syntax enable " Enable syntax highlighting
+"endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Current block indents and outdents with tab and shift-tab
+
+inoremap <S-Tab> <C-o><LT><LT>
+nnoremap <Tab> >>
+nnoremap <S-Tab> <LT><LT>
+vnoremap <Tab> >
+vnoremap <S-Tab> <LT>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Alt-o open bufexplorer
+
+inoremap <silent> <A-o> <Esc>:BufExplorer<CR>
+inoremap o   <Esc>:BufExplorer<CR>
+ noremap <silent> <A-o>      :BufExplorer<CR>
+ noremap o      :BufExplorer  <CR>
+onoremap <silent> <A-o> <C-c>:BufExplorer<CR>
+onoremap o   <C-c>:BufExplorer<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Alt-U and Alt-I work like Ctrl-E and Ctrl-Y
+
+inoremap <A-u> <Esc><C-e>
+inoremap u <Esc><C-e>
+ noremap <A-u>      <C-e>
+ noremap u      <C-e>
+onoremap <A-u> <C-c><C-e>
+onoremap u <C-c><C-e>
+
+inoremap <A-i> <Esc><C-y>
+inoremap i   <Esc><C-y>
+ noremap <A-i>      <C-y>
+ noremap i        <C-y>
+onoremap <A-i> <C-c><C-y>
+onoremap i   <C-c><C-y>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Map Alt-key actions to ^W window operations.
+
+" horizontal splitter
+inoremap <A-s> <Esc><C-w>s
+inoremap s   <Esc><C-w>s
+ noremap <A-s>      <C-w>s
+ noremap s        <C-w>s
+onoremap <A-s> <C-c><C-w>s
+onoremap s   <C-c><C-w>s
+
+inoremap <A-h> <Esc><C-w>h
+inoremap h   <Esc><C-w>h
+ noremap <A-h>      <C-w>h
+ noremap h        <C-w>h
+onoremap <A-h> <C-c><C-w>h
+onoremap h   <C-c><C-w>h
+
+inoremap <A-j> <Esc><C-w>j
+inoremap j   <Esc><C-w>j
+ noremap <A-j>      <C-w>j
+ noremap j        <C-w>j
+onoremap <A-j> <C-c><C-w>j
+onoremap j   <C-c><C-w>j
+
+inoremap <A-k> <Esc><C-w>k
+inoremap k   <Esc><C-w>k
+ noremap <A-k>      <C-w>k
+ noremap k        <C-w>k
+onoremap <A-k> <C-c><C-w>k
+onoremap k   <C-c><C-w>k
+
+inoremap <A-l> <Esc><C-w>l
+inoremap l   <Esc><C-w>l
+ noremap <A-l>      <C-w>l
+ noremap l        <C-w>l
+onoremap <A-l> <C-c><C-w>l
+onoremap l   <C-c><C-w>l
+
+noremap <A-c> <Esc><C-w>c
+noremap c   <Esc><C-w>c
+ noremap <A-c>      <C-w>c
+ noremap c        <C-w>c
+onoremap <A-c> <C-c><C-w>c
+onoremap c   <C-c><C-w>c
+
+" vertical splitter
+inoremap <A-v> <Esc><C-w>v
+inoremap v   <Esc><C-w>v
+ noremap <A-v>      <C-w>v
+ noremap v        <C-w>v
+onoremap <A-v> <C-c><C-w>v
+onoremap v   <C-c><C-w>v
+
+" resize alt- and alt=, even though = doesn't equalize
+inoremap <A--> <Esc><C-w>-
+inoremap -   <Esc><C-w>-
+ noremap <A-->      <C-w>-
+ noremap -        <C-w>-
+onoremap <A--> <C-c><C-w>-
+onoremap -   <C-c><C-w>-
+
+inoremap <A-+> <Esc><C-w>+
+inoremap +   <Esc><C-w>+
+ noremap <A-+>      <C-w>+
+ noremap +        <C-w>+
+onoremap <A-+> <C-c><C-w>+
+onoremap +   <C-c><C-w>+
+
+inoremap <A-=> <Esc><C-w>+
+inoremap =   <Esc><C-w>+
+ noremap <A-=>      <C-w>+
+ noremap =        <C-w>+
+onoremap <A-=> <C-c><C-w>+
+onoremap =   <C-c><C-w>+
+
+" alt-, and alt-. are narrowen, widen
+inoremap <A-,> <Esc><C-w><
+inoremap ,   <Esc><C-w><
+ noremap <A-,>      <C-w><
+ noremap ,        <C-w><
+onoremap <A-,> <C-c><C-w><
+onoremap ,   <C-c><C-w><
+
+inoremap <A-.> <Esc><C-w>>
+inoremap .   <Esc><C-w>>
+ noremap <A-.>      <C-w>>
+ noremap .        <C-w>>
+onoremap <A-.> <C-c><C-w>>
+onoremap .   <C-c><C-w>>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-X    //-comment range 's,'d
+
+inoremap <S-A-x> <Esc>:'s,'ds/^/\/\//g<CR>:noh<CR>
+inoremap X     <Esc>:'s,'ds/^/\/\//g<CR>:noh<CR>
+ noremap <S-A-x>      :'s,'ds/^/\/\//g<CR>:noh<CR>
+ noremap X        :'s,'ds/^/\/\//g  <CR>:noh<CR>
+onoremap <S-A-x> <C-c>:'s,'ds/^/\/\//g<CR>:noh<CR>
+onoremap X     <C-c>:'s,'ds/^/\/\//g<CR>:noh<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-Z    #-comment range 's,'d
+
+inoremap <S-A-z> <Esc>:'s,'ds/^/#/g<CR>:noh<CR>
+inoremap Z     <Esc>:'s,'ds/^/#/g<CR>:noh<CR>
+ noremap <S-A-z>      :'s,'ds/^/#/g<CR>:noh<CR>
+ noremap Z          :'s,'ds/^/#/g  <CR>:noh<CR>
+onoremap <S-A-z> <C-c>:'s,'ds/^/#/g<CR>:noh<CR>
+onoremap Z     <C-c>:'s,'ds/^/#/g<CR>:noh<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-C    -- (Lua) -comment range 's,'d
+
+inoremap <S-A-c> <Esc>:'s,'ds/^/--/g<CR>:noh<CR>
+inoremap C     <Esc>:'s,'ds/^/--/g<CR>:noh<CR>
+ noremap <S-A-c>      :'s,'ds/^/--/g<CR>:noh<CR>
+ noremap C          :'s,'ds/^/--/g  <CR>:noh<CR>
+onoremap <S-A-c> <C-c>:'s,'ds/^/--/g<CR>:noh<CR>
+onoremap C     <C-c>:'s,'ds/^/--/g<CR>:noh<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-S    -- (C++) - change the current word/identifier in a quoted
+"	string to an osteram expression.
+
+inoremap <S-A-s> <Esc>lbdei" << <Esc>pa << "<Esc>bb
+inoremap S     <Esc>lbdei" << <Esc>pa << "<Esc>bb
+ noremap <S-A-s>      lbdei" << <Esc>pa << "<Esc>bb
+ noremap S          lbdei" << <Esc>pa << "<Esc>bb
+onoremap <S-A-s> <C-c>lbdei" << <Esc>pa << "<Esc>bb
+onoremap S     <C-c>lbdei" << <Esc>pa << "<Esc>bb
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-D    -- (C++) - change the current word/identifier in a class
+"	definition to a set of options for standard members.
+"	Sets the 's,'d mark range to the new text.
+
+function! g:cxx_define_standard_members ()
+	let l:text = [
+\'// Default constructor.',
+\'classname() = default;',
+\'//? classname() : { }',
+\'// Copy constructor.',
+\'classname(classname const &) = default;',
+\'//? classname(classname const & that) : { }',
+\'// Move constructor.',
+\'classname(classname &&) = default;',
+\'//? classname(classname && that) : { }',
+\'// Assignment operator.',
+\'classname & operator = (classname const &) = default;',
+\'//? classname & operator = (classname const & that)',
+\'//? {',
+\'//? 	if (this != &that)',
+\'//? 	{',
+\'//? 		x//?',
+\'//? 	}',
+\'//? 	return *this;',
+\'//? }',
+\'// Move assignment operator.',
+\'classname & operator = (classname &&) = default;',
+\'//? classname & operator = (classname & that)',
+\'//? {',
+\'//? 	assert(this != &that);',
+\'//? 	x//?',
+\'//? 	return *this;',
+\'//? }',
+\'// Swap.',
+\'void swap(classname & that)',
+\'{',
+\'	std::swap<>(this->, that.);',
+\'	//? ...',
+\'}',
+\]
+	let l:classname = expand('<cword>')
+	for l:ix in range(0, len(l:text) - 1)
+		let l:text[l:ix] = substitute(l:text[l:ix], 'classname', l:classname, 'g')
+	endfor
+	call append('.', l:text)
+	let first_ln = line('.') + 1
+	let last_ln = line('.') + len(l:text)
+	call setpos("'s", [0, first_ln, 1, 0])
+	call setpos("'d", [0, last_ln, 1, 0])
+endfunction
+
+inoremap <S-A-d> <Esc>:call g:cxx_define_standard_members()<CR>
+inoremap D     <Esc>:call g:cxx_define_standard_members()<CR>
+ noremap <S-A-d>      :call g:cxx_define_standard_members()<CR>
+ noremap D          :call g:cxx_define_standard_members()<CR>
+onoremap <S-A-d> <C-c>:call g:cxx_define_standard_members()<CR>
+onoremap D     <C-c>:call g:cxx_define_standard_members()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"	Shift-Alt-T    -- (C++) - insert a new line STOAT_TODO(); //?"
+"	string to an osteram expression.
+
+inoremap <S-A-t> <Esc>oSTOAT_TODO_MSG(); //?<Esc>
+inoremap T     <Esc>oSTOAT_TODO_MSG(); //?<Esc>
+ noremap <S-A-t>      oSTOAT_TODO_MSG(); //?<Esc>
+ noremap T          oSTOAT_TODO_MSG(); //?<Esc>
+onoremap <S-A-t> <C-c>oSTOAT_TODO_MSG(); //?<Esc>
+onoremap T     <C-c>oSTOAT_TODO_MSG(); //?<Esc>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Quickfix will use already-open windows for the needed file when possible.
+" Otherwise, it will create a split.
+set switchbuf=useopen,usetab,split
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Just hit F1-2 to play back macro q, or w
+"
+nmap <F1> @q
+nmap <F2> @w
+
+" F3/F4 - previous/next buffer
+nnoremap <F3> :bprev<CR>
+nnoremap <F4> :bnext<CR>
+
+" F5 - Build/make, using location windows rather than a quickfix window.
+"		lmake!   l->use location window
+"		make!   !->don't automatically jump to first error
+inoremap <F5> <Esc>:wa | :make<CR>
+ noremap <F5>      :wa | :make<CR>
+onoremap <F5> <C-c>:wa | :make<CR>
+
+" F6 - Toggle wrap.
+inoremap <F6> <C-o>:set invwrap<CR>
+ noremap <F6>      :set invwrap<CR>
+onoremap <F6> <C-c>:set invwrap<CR>
+
+" F7/F8 - previous/next error
+nnoremap <F7> :cprev<CR>
+"nnoremap <F7> :lprev<CR>
+nnoremap <F8> :cnext<CR>
+"nnoremap <F8> :lnext<CR>
+
+" F7
+" F8
+" F9
+
+" Don't map <F10>, it's needed to access the menu.
+
+inoremap <F11> <Esc>:Explore<CR>
+ noremap <F11>      :Explore<CR>
+onoremap <F11> <C-c>:Explore<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Change semicolon to Esc.
+
+function! g:mjr_map_semicolon ()
+	 noremap  ; <Esc>
+	 noremap! ; <Esc>
+
+	" Insert an actual semicolon with <C-l>, use comma for its effect in other modes.
+	inoremap <C-l> ;
+	 noremap ,     ;
+	onoremap ,     ;
+endfunction
+call g:mjr_map_semicolon()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Printing
+"
+set pfn=Lucida_Console:h8
+set printoptions=number:y,left:18pt,right:18pt
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	line numbering
+"
+set number
+set numberwidth=6
+""	hl-LineNr
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	TODO nice-to-haves
+"
+" Ruby macros.
+" insert line:
+"		$stderr.puts "#{__FILE__}:#{__LINE__} here"
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2010-06-24, 2011-04-12
+set bg=light
+"set bg=dark
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-08-16
+"	change directory for swap files
+"   default .,~/tmp,/var/tmp,/tmp
+"set directory=~/vartmp/vimswp,/var/tmp,/tmp
+set directory=$HOME/vartmp/vimswp
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-10-01
+"	settings for Project plugin
+let g:proj_window_width=35
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-11-15
+"	use cpp11 syntax plugin http://www.vim.org/scripts/script.php?script_id=3797
+au BufNewFile,BufRead *.[ch]    set syntax=cpp11
+au BufNewFile,BufRead *.[chi]pp set syntax=cpp11
+au BufNewFile,BufRead *.[chi]xx set syntax=cpp11
+au BufNewFile,BufRead *.[chi]++ set syntax=cpp11
+au BufNewFile,BufRead *.cc set syntax=cpp11
+au BufNewFile,BufRead *.hh set syntax=cpp11
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-11-15
+"	
+"function! g:mjr_map_semicolon_conque (term)
+"	let g:ConqueTerm_EscKey = ';'
+"	iunmap <buffer>   <C-o>
+"	inoremap <buffer>   ;   <Esc>
+"	inoremap <buffer> <C-l> ;
+"endfunction
+"call conque_term#register_function('after_keymap', 'g:mjr_map_semicolon_conque')
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-11-18
+"	This is the setting that shows the command prefix chars you've typed in
+"	the bottom right.
+set showcmd
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2011-11-18
+"	From Steve Losh <steve@stevelosh.com>
+"	https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
+
+" Clean whitespace
+map <leader>W  :%s/\s\+$//<cr>:let @/=''<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
