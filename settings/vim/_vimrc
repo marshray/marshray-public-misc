@@ -441,7 +441,23 @@ set bg=light
 "	change directory for swap files
 "   default .,~/tmp,/var/tmp,/tmp
 "set directory=~/vartmp/vimswp,/var/tmp,/tmp
-set directory=$HOME/vartmp/vimswp
+if $OS == "Windows_NT"
+	if $PATH =~ "/cygdrive"
+		let s:vimswp = $HOME . "/vartmp/vimswp"
+	else
+		" MS Windows
+		let s:vimswp = $USERPROFILE . "\\AppData\\Local\\vartmp\\vimswp"
+		if ( ! isdirectory(s:vimswp) )
+			call mkdir(s:vimswp, "p", 0700)
+		endif
+	endif
+else
+	let s:vimswp = $HOME . "/vartmp/vimswp"
+endif
+if (exists("s:vimswp") && isdirectory(s:vimswp))
+	let &directory = s:vimswp
+endif
+unlet! s:vimswp
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	MJR 2011-10-01
