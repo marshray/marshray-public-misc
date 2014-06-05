@@ -1,7 +1,8 @@
 
 Swapping left control and capslock here.
 
-http://www.microsoft.com/whdc/device/input/w2kscan-map.mspx
+http://msdn.microsoft.com/en-us/library/windows/hardware/jj128267(v=vs.85).aspx
+http://www.win.tue.nl/~aeb/linux/kbd/scancodes.html
 
 ** Check for existing value:
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
@@ -36,6 +37,19 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map
 1D002900^
 00000000 /f
 
+For Lenovo Thinkpad W530
+1D003A00 (caps lock 0x003A) -> (left ctrl 0x001D)
+00001D00 (left ctrl 0x001D) -> nothing
+5DE037E0 (PrtSc 0xE037) -> (menu 0xE05D)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d ^
+00000000^
+00000000^
+04000000^
+1D003A00^
+00001D00^
+5DE037E0^
+00000000 /f
+
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map"
 
 ================================================================================
@@ -47,6 +61,9 @@ left win   0xE05B
 right win  0xE05C
 app "menu" 0xE05D
 
+PrtSc      0xE02A 0xE037
+
+menu      0xE05D
 caps lock 0x003A
 Space             0x39
 backtick tilde    0x29
