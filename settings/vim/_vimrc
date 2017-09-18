@@ -1,4 +1,4 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 scriptencoding utf-8
 
@@ -77,6 +77,11 @@ set scrolloff=5   " keep this many lines visible
 " dir for :browse is from current buffer
 set browsedir=buffer
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" <leader> key is spacebar.
+"
+let mapleader=" "
+ 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	From http://www.vi-improved.org/vimrc.php.
 
@@ -285,52 +290,52 @@ onoremap S     <C-c>lbdei" << <Esc>pa << "<Esc>bb
 "	definition to a set of options for standard members.
 "	Sets the 's,'d mark range to the new text.
 
-function! g:cxx_define_standard_members ()
-	let l:text = [
-\'// Default constructor.',
-\'classname() = default;',
-\'//? classname() : { }',
-\'// Copy constructor.',
-\'classname(classname const &) = default;',
-\'//? classname(classname const & that) : { }',
-\'// Move constructor.',
-\'classname(classname &&) = default;',
-\'//? classname(classname && that) : { }',
-\'// Assignment operator.',
-\'classname & operator = (classname const &) = default;',
-\'//? classname & operator = (classname const & that)',
-\'//? {',
-\'//? 	if (this != &that)',
-\'//? 	{',
-\'//? 		x//?',
-\'//? 	}',
-\'//? 	return *this;',
-\'//? }',
-\'// Move assignment operator.',
-\'classname & operator = (classname &&) = default;',
-\'//? classname & operator = (classname & that)',
-\'//? {',
-\'//? 	assert(this != &that);',
-\'//? 	x//?',
-\'//? 	return *this;',
-\'//? }',
-\'// Swap.',
-\'void swap(classname & that)',
-\'{',
-\'	std::swap<>(this->, that.);',
-\'	//? ...',
-\'}',
-\]
-	let l:classname = expand('<cword>')
-	for l:ix in range(0, len(l:text) - 1)
-		let l:text[l:ix] = substitute(l:text[l:ix], 'classname', l:classname, 'g')
-	endfor
-	call append('.', l:text)
-	let first_ln = line('.') + 1
-	let last_ln = line('.') + len(l:text)
-	call setpos("'s", [0, first_ln, 1, 0])
-	call setpos("'d", [0, last_ln, 1, 0])
-endfunction
+"function! g:cxx_define_standard_members ()
+"	let l:text = [
+"\'// Default constructor.',
+"\'classname() = default;',
+"\'//? classname() : { }',
+"\'// Copy constructor.',
+"\'classname(classname const &) = default;',
+"\'//? classname(classname const & that) : { }',
+"\'// Move constructor.',
+"\'classname(classname &&) = default;',
+"\'//? classname(classname && that) : { }',
+"\'// Assignment operator.',
+"\'classname & operator = (classname const &) = default;',
+"\'//? classname & operator = (classname const & that)',
+"\'//? {',
+"\'//? 	if (this != &that)',
+"\'//? 	{',
+"\'//? 		x//?',
+"\'//? 	}',
+"\'//? 	return *this;',
+"\'//? }',
+"\'// Move assignment operator.',
+"\'classname & operator = (classname &&) = default;',
+"\'//? classname & operator = (classname & that)',
+"\'//? {',
+"\'//? 	assert(this != &that);',
+"\'//? 	x//?',
+"\'//? 	return *this;',
+"\'//? }',
+"\'// Swap.',
+"\'void swap(classname & that)',
+"\'{',
+"\'	std::swap<>(this->, that.);',
+"\'	//? ...',
+"\'}',
+"\]
+"	let l:classname = expand('<cword>')
+"	for l:ix in range(0, len(l:text) - 1)
+"		let l:text[l:ix] = substitute(l:text[l:ix], 'classname', l:classname, 'g')
+"	endfor
+"	call append('.', l:text)
+"	let first_ln = line('.') + 1
+"	let last_ln = line('.') + len(l:text)
+"	call setpos("'s", [0, first_ln, 1, 0])
+"	call setpos("'d", [0, last_ln, 1, 0])
+"endfunction
 
 inoremap <S-A-d> <Esc>:call g:cxx_define_standard_members()<CR>
 inoremap D     <Esc>:call g:cxx_define_standard_members()<CR>
@@ -400,7 +405,7 @@ onoremap <F11> <C-c>:Explore<CR>
 "
 " Change semicolon to Esc.
 
-function! g:mjr_map_semicolon ()
+function! g:Mjr_map_semicolon ()
 	 noremap  ; <Esc>
 	 noremap! ; <Esc>
 
@@ -409,7 +414,7 @@ function! g:mjr_map_semicolon ()
 	 noremap ,     ;
 	onoremap ,     ;
 endfunction
-call g:mjr_map_semicolon()
+call g:Mjr_map_semicolon()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Printing
@@ -497,6 +502,39 @@ set showcmd
 "	https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
 
 " Clean whitespace
-map <leader>W  :%s/\s\+$//<cr>:let @/=''<CR>
+map <leader>w  :%s/\s\+$//<cr>:let @/=''<CR>
+" also try
+" :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"    MJR 2016-09-22
+"    <leader> p
+"    Copy full path to the current file into the paste buffer.
+map <leader>p :let @+ = expand('%:p')<cr>
+ 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2016-07-27 load pathogen
+execute pathogen#infect()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2017-01-29 load syntastic
+" This is useless with Elixir
+
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"
+"let g:syntastic_elixir_checkers = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if $TERM == "screen-256color" || $TERM == "xterm-256color"
+	set bg=dark
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
