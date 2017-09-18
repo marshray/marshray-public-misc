@@ -19,15 +19,15 @@ if $OS == "Windows_NT"
 	else
 		" MS Windows
 		"set guifont=ProggyCleanTT:h12
-		set guifont=Lucida_Console:h9
+		set guifont=Lucida_Console:h10
 	endif
 else
 	set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
 endif
 
-set columns=100
+set columns=140
 
-set lines=55
+set lines=75
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -45,7 +45,11 @@ set visualbell t_vb=	" disable bells
 set winaltkeys=no
 
 " Turns off menu altogether.
-"set guioptions-=m
+set guioptions-=m
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	MJR 2017-09-12
+"	settings for Project plugin
+let g:proj_window_width=45
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
