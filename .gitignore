@@ -1,0 +1,5 @@
+# VIM temp backup files
+*.swp
+
+# Visual Studio Code workspace files
+*.code-workspace
