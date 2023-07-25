@@ -8,7 +8,6 @@ echo ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ "%backup-file%" ^^^^^^^^^^^^^^^^^^^^^^
 
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout" >>"%backup-file%"
 
-
 echo vvvvvvvvvvvvvvvvvv current vvvvvvvvvvvvvvvvvv
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
 echo ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ current ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
