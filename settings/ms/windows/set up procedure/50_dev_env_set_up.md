@@ -21,14 +21,19 @@ Download `rustup-init.exe` from [rust-lang.org](https://www.rust-lang.org/tools/
 At the time of this writing, this binary is not signed.
 Check what you downloaded at [virusttotal](https://virusttotal.com/).
 
+The `CARGO_HOME` path will get embedded in the built binaries. Set env vars `CARGO_HOME`
+and `RUSTUP_HOME` to something shorter than the default `%USERPROFILE%\.cargo` and
+`%USERPROFILE%\.rustup`. For example, `C:\u\cargo` and `C:\u\rustup`.
+
 ## After basic apps are installed
 ```
 reg query HKCU\Environment /v Path
-    HKEY_CURRENT_USER\Environment
-        Path    REG_EXPAND_SZ    C:\app\git\bin;C:\app\bin;%USERPROFILE%\.cargo\bin;
+HKEY_CURRENT_USER\Environment
+    Path    REG_SZ    C:\app\bin;C:\app\git\bin;C:\u\cargo\bin;
 
 cmd.exe /c set | findstr /i "^Path=" & pause
-    Path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\OpenSSH\;C:\app\git\bin;C:\app\bin;C:\Users\marsh\.cargo\bin
+    Path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+    C:\Windows\System32\OpenSSH\;C:\app\bin;C:\app\git\bin;C:\u\cargo\bin;C:\Users\marsh\app\vscode\bin
 ```
 
 ### System Variables
@@ -41,7 +46,7 @@ reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v
 ```
 reg query HKCU\Environment /v Path
     HKEY_CURRENT_USER\Environment
-        Path    REG_EXPAND_SZ    C:\app\git\bin;C:\app\bin;%USERPROFILE%\.cargo\bin;
+        Path    REG_EXPAND_SZ    C:\app\git\bin;C:\app\bin;%;C:\u\cargo\bin;
 ```
 
 ##  Nushell

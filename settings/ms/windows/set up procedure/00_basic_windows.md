@@ -11,6 +11,8 @@ If migrating from a different computer, be sure to
 
 <br/>
 
+* [Create Windows 11 Installation Media](https://www.microsoft.com/en-us/software-download/windows11)
+
 # Settings pertaining to entire system
 
 ## CapsLock to Ctrl
@@ -71,8 +73,8 @@ if not exist "%misc-backups%" mkdir "%misc-backups%"
 copy "%hostsfile%" "%misc-backups%\hosts.0.txt"
 echo. >>%hostsfile%
 echo # Disable edge new tab page content loading >>%hostsfile%
-echo 127.123.145.167  api.msn.com >>%hostsfile%
-echo 127.123.145.167  ntp.msn.com >>%hostsfile%
+echo 0.0.0.0  ntp.msn.com >>%hostsfile%
+echo 0.0.0.0  ntp.msn.com >>%hostsfile%
 (set hostsfile=)
 ```
 
@@ -182,6 +184,14 @@ mkdir "$c_app_dirpath\bin"
 
 # Settings pertaining to user profile
 
+## Don't send my typing into the start menu to Bing without asking
+
+### Win-R -> cmd.exe
+```CMD
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v BingSearchEnabled
+rem reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v BingSearchEnabled /t REG_DWORD /d 0
+```
+
 ## Disambiguate folders
 
 ### Win-R -> cmd.exe
@@ -223,6 +233,8 @@ System
 		Scale & layout
 			Scale [adjust to preference]
 	Notifications
+		Apps
+			[off] Suggested
 		Additional settings
 			[uncheck] Show the Windows welcome experience after updates
 			[uncheck] Suggest ways to get the most out of Windows
@@ -243,7 +255,6 @@ Personalization
 			[select, drop down] Picture
 				[select] Choose a photo
 				[uncheck] Get fun facts, tips, tricks, and more on your lock screen
-
 	Start
 		Layout
 			[select] More pins
@@ -627,6 +638,11 @@ I choose to be bold and take risks here.
 
 Move a bunch of junk from Path to Path-not
 
+* Not having LOCALAPPDATA\Microsoft\WindowsApps in Path had the effect of breaking the default
+terminal profile for WSL2 Ubuntu, which specifies the command line as simply 'ubuntu.exe'. Adjusting
+the profile to refer to %LOCALAPPDATA%\Microsoft\WindowsApps\ubuntu.exe instead seems to have
+fixed it.
+
 Result:
 
 ### System Variables
@@ -650,3 +666,7 @@ reg query HKCU\Environment /v Path-not2
 HKEY_CURRENT_USER\Environment
     Path-not2    REG_EXPAND_SZ    %USERPROFILE%\AppData\Local\Microsoft\WindowsApps;
 ```
+
+## Other stuff
+
+### Install local printers
