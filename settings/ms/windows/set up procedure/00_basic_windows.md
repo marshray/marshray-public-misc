@@ -241,6 +241,8 @@ System
 			[uncheck] Get tips and suggestions when using Windows
 	Nearby sharing
 		[turn off] Nearby sharing
+```
+```		
 Personalization
 	Start
 		Layout
@@ -274,6 +276,8 @@ Personalization
 			[check] Automatically hide the taskbar
 	Device usage
 		-> set all to 'Off'
+```
+```		
 Accessibility
 	Interaction
 		Keyboard
@@ -286,6 +290,8 @@ Accessibility
 			[turn off] Toggle keys
 			On-screen keyboard, access keys, and Print screen
 				[turn on] Underline access keys
+```
+```		
 Apps
 	Apps for websites
 		-> turn all off
@@ -301,6 +307,20 @@ Apps
 			[uncheck] Windows Subsystem for Linux (this is WSL1)
 			[uncheck] Work folders client
 		This will require restart.
+	Advanced App settings
+		Share across devices
+			[set] Off
+		App execution aliases
+			[set] All off
+		Archive apps
+			[set] Off
+	Startup
+		[turn on] Microsoft Defender
+		[turn on] Microsoft OneDrive
+		[turn on] Windows Security notification icon
+		[turn off] Everything else
+```
+```		
 Time & Language
 	Typing
 		Advanced keyboard settings tab
@@ -356,20 +376,23 @@ View by
 
 ### Additional profiles
 
-Create "misc" and "social":
+Create "misc" and "social", maybe others.
 
 * Click on current profile -> Other profiles -> Add profile
 
-### For each (initial and new) Edge browser profile
-
+### For each Edge browser profile
 ```
-click on '...' in upper left -> Settings
+====vvvv====vvvv==== For each Edge browser profile ====vvvv====vvvv====
+```
+```
+Click on '...' in upper left -> Settings
 
 Your profile
 	click on "..." to the right of profile name -> Edit
 		Select a unique image
 		Consider renaming profile
-
+```
+```
 	Profiles (Settings section on left)
 		Microsoft Rewards
 			[turn off] Microsoft Rewards
@@ -387,7 +410,8 @@ Your profile
 			[turn off] Allow single sign-on for Microsoft personal sites using this profile
 		Share browsing data with other Windows features
 			[turn off] Share browsing data with other Windows features
-
+```
+```
 	Privacy, search, and services (Settings section on left)
 		Tracking prevention
 			-> set to Strict
@@ -422,7 +446,8 @@ Your profile
 				[turn off] Show me search and site suggestions using my typed characters
 				Search engine used in the address bar.
 					-> Consider changing
-
+```
+```
 	Appearance (Settings section on left)
 		Customize appearance
 			-> Choose whatever you want for this profile
@@ -443,14 +468,16 @@ Your profile
 					[turn off] Show hover menu on image hover
 			Mini menu on text selection
 				[turn off] Show smart actions
-
+```
+```
 	Sidebar (Settings section on left)
 		Customize sidebar
 			[turn off] Always show sidebar
 			[turn off] Personalize my top sites in customize sidebar
 		App and notification settings
 			[turn off] Allow sidebar apps to show notifications
-
+```
+```
 	Start, home, and new tabs (Settings section on left)
 		When Edge starts
 			Open these pages:
@@ -464,10 +491,12 @@ Your profile
 			Customize your new tab page layout and content
 				* don't click this
 			[turn off] Preload the new tab page for a faster experience
-
+```
+```
 	Share, copy and paste (Settings section on left)
 		-> Plain text
-
+```
+```
 	Cookies and site permissions (Settings section on left)
 		Cookies and data stored
 			Manage and delete cookies and site data
@@ -475,25 +504,31 @@ Your profile
 				Allow sites to save and read cookie data (recommended)
 					-> Consider turning off
 				[turn off] Preload pages for faster browsing and searching
-
+```
+```
 	Default browser (Settings section on left)
 		Nothing
-
+```
+```
 	Downloads (Settings section on left)
 		Open Office files in the browser
 			-> Consider turning off
-	
+```
+```
 	Family (Settings section on left)
 		Nothing
-	
+```
+```
 	Languages (Settings section on left)
 		Share additional OS regional format
 			Share additional operating system region
 				-> Never
-
+```
+```
 	Printers (Settings section on left)
 		Nothing
-
+```
+```
 	System and performance (Settings section on left)
 		Startup boost
 			-> turn off (this setting seems to be system- or user-wide)
@@ -501,7 +536,8 @@ Your profile
 			-> turn off (this setting seems to be system- or user-wide)
 		Use hardware acceleration when available
 			-> Consider turning off (this setting seems to be system- or user-wide)
-
+```
+```
 Hit F12
 	If you get a popup confirmation
 		Remember my decision -> check
@@ -511,10 +547,10 @@ Hit F12
 			[click] Leftmost option to pop out DevTools into separate window
 	[uncheck] Show Welcome after each update
 	Close dev tools window
-
-====^^^^====^^^^==== For each (initial and new) Edge browser profile ====^^^^====^^^^====
 ```
-***End of 'For each Edge browser profile'***
+```
+====^^^^====^^^^==== For each Edge browser profile ====^^^^====^^^^====
+```
 
 ## Set up a SecretStore SecretVault for storing the WSL2 Ubuntu user password
 

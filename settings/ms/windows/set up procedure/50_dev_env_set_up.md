@@ -25,6 +25,35 @@ The `CARGO_HOME` path will get embedded in the built binaries. Set env vars `CAR
 and `RUSTUP_HOME` to something shorter than the default `%USERPROFILE%\.cargo` and
 `%USERPROFILE%\.rustup`. For example, `C:\u\cargo` and `C:\u\rustup`.
 
+## Nvidia
+
+The Nvidia video card driver install edited the system `Path` to put
+* C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+
+That's 112 bytes of junk in the environment of every process just to locate four dlls.
+Also, a bit ridiculous to still be using a 32-bit compatibility directory in this
+day and age. But you do you, Nvidia.
+
+### PATH
+
+The Nvidia CUDA install edited the system `Path` to put
+* C:\app\nvidia\cuda\v12.2\bin
+* C:\app\nvidia\cuda\v12.2\libnvvp
+ahead of even the Windows system directories. (Gee thanks guys real helpful).
+The 'libnvvp' directory is particularly useless, it contains only `nvvp.exe`
+and `eclipse.exe`, neither of which run without a Java runtime available.
+
+It also appends to the system `Path`
+* C:\Program Files\NVIDIA Corporation\Nsight Compute 2023.2.2\
+This directory doesn't even contains executables, just a couple of .bat files that have
+start menu items anyway.
+
+It also created the variables `CUDA_PATH` and `CUDA_PATH_V12_2` with the value `C:\app\nvidia\cuda\v12.2`.
+
+But my development tools seemed to look for the variable `CUDA_ROOT` for some reason.
+
+In any case, `%CUDA_PATH%\bin` needs to be in the `Path``.
+
 ## After basic apps are installed
 ```
 reg query HKCU\Environment /v Path
