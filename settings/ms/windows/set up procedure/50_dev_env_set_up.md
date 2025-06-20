@@ -45,7 +45,7 @@ and `eclipse.exe`, neither of which run without a Java runtime available.
 
 It also appends to the system `Path`
 * C:\Program Files\NVIDIA Corporation\Nsight Compute 2023.2.2\
-This directory doesn't even contains executables, just a couple of .bat files that have
+This directory doesn't even contain executables, just a couple of .bat files that have
 start menu items anyway.
 
 It also created the variables `CUDA_PATH` and `CUDA_PATH_V12_2` with the value `C:\app\nvidia\cuda\v12.2`.
@@ -54,7 +54,7 @@ But my development tools seemed to look for the variable `CUDA_ROOT` for some re
 
 In any case, `%CUDA_PATH%\bin` needs to be in the `Path``.
 
-## After basic apps are installed
+## After dev apps are installed
 ```
 reg query HKCU\Environment /v Path
 HKEY_CURRENT_USER\Environment
@@ -69,13 +69,21 @@ cmd.exe /c set | findstr /i "^Path=" & pause
 ```
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path
     HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
-        Path    REG_EXPAND_SZ    %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\OpenSSH\;
+        Path    REG_EXPAND_SZ    %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SystemRoot%\System32\OpenSSH;C:\Program Files\PowerShell\7\
 ```
 ### User variables
 ```
+reg query HKCU\Environment /v CARGO_HOME
+HKEY_CURRENT_USER\Environment
+    CARGO_HOME    REG_SZ    C:\u\cargo
+
+reg query HKCU\Environment /v RUSTUP_HOME
+HKEY_CURRENT_USER\Environment
+    RUSTUP_HOME    REG_SZ    C:\u\rustup
+
 reg query HKCU\Environment /v Path
     HKEY_CURRENT_USER\Environment
-        Path    REG_EXPAND_SZ    C:\app\git\bin;C:\app\bin;%;C:\u\cargo\bin;
+        Path    REG_EXPAND_SZ    C:\app\bin;
 ```
 
 ##  Nushell

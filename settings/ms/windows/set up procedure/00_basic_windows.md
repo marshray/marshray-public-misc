@@ -58,14 +58,24 @@ Screen and sleep
 Power mode
 	-> Best performance
 ```
-## (Very Optional) Disable Edge new tab page content loading
 
-Note: This method seems to be causing a weird refresh 2 seconds after opening a new tab.
-It's possible that a different IP would fix that.
+## (Optional) Enable hibernation
+
+- How to disable and re-enable hibernation on a computer that is running Windows<br>
+  June 2024<br>
+  [https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation](https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation )
 
 ### Win-X -> Terminal (Admin)
 
+```cmd
+powercfg.exe /hibernate on
 ```
+
+## (Very Optional) Disable Edge new tab page content loading
+
+### Win-X -> Terminal (Admin)
+
+```cmd
 (set misc-backups=%USERPROFILE%\misc-backups)
 if not exist "%misc-backups%" mkdir "%misc-backups%"
 
@@ -552,36 +562,77 @@ Hit F12
 ====^^^^====^^^^==== For each Edge browser profile ====^^^^====^^^^====
 ```
 
-## Set up a SecretStore SecretVault for storing the WSL2 Ubuntu user password
+## Set up a SecretStore SecretVault
+
+We'll use this later for storing the WSL2 Ubuntu user password.
 
 ### Install PowerShell 7 (or later)
 
 See [30 powershell 7 or later](./30_powershell_7_or_later.md).
 
 ### Win-X -> Terminal -> PowerShell 7
+
+See:
+* `Microsoft.PowerShell.SecretManagement`
+  - [learn.microsoft.com/ ... /microsoft.powershell.secretmanagement](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.secretmanagement/)
+  - [github.com/powershell/secretmanagement](https://github.com/powershell/secretmanagement)
+  - [`Register-SecretVault`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.secretmanagement/register-secretvault)
+  - [`Get-SecretVault`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.secretmanagement/get-secretvault)
+* `Microsoft.PowerShell.SecretStore`
+  - [learn.microsoft.com/ ... /microsoft.powershell.secretstore](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.secretstore/)
+  - [github.com/powershell/secretstore](https://github.com/powershell/secretstore)
+
+
 ```PowerShell
-Find-Module -Name Microsoft.PowerShell.SecretStore
+Find-Module -Name Microsoft.PowerShell.SecretManagement | fl
+# Version Name                                Repository  Description
+# ------- ----                                ----------  -----------
+# 1.1.2   Microsoft.PowerShell.SecretManagem… PSGallery   This module provides a convenient way for a user to sto…
+
+Install-Module -Name Microsoft.PowerShell.SecretManagement
+
+Find-Module -Name Microsoft.PowerShell.SecretStore | fl
 # Version Name                             Repository Description
 # ------- ----                             ---------- -----------
 # 1.0.6   Microsoft.PowerShell.SecretStore PSGallery  This PowerShell module is an extension v…
 
 Install-Module -Name Microsoft.PowerShell.SecretStore
 
-Register-SecretVault -Name DefaultVault_SecretStore -ModuleName Microsoft.PowerShell.SecretStore -DefaultVault
-Get-SecretVault -Name DefaultVault_SecretStore | fl
+Register-SecretVault -DefaultVault -Name SecretStore -ModuleName Microsoft.PowerShell.SecretStore
 
+Get-SecretVault
+# Name       ModuleName                       IsDefaultVault
+# ----       ----------                       --------------
+# SecretStore Microsoft.PowerShell.SecretStore True
+
+Get-SecretVault -Name SecretStore | fl
+# Name            : SecretStore
+# ModuleName      : Microsoft.PowerShell.SecretStore
+# VaultParameters : {}
+# IsDefault       : True
+# ...
+```
+
+***Choose a strong password*** ... ***Save it somewhere.***
+
+It's not clear what password hashing function, work factor, or anti-hammering protection is applied.
+
+```PowerShell
 # Actually create the SecretStore vault. This should ask for a password.
-Get-SecretStoreConfiguration
+Set-SecretStorePassword
 
-# Add the secret for the Ubuntu user password.
-# This will ask for a username and password, but the username doesn't matter.
-Set-Secret -Vault DefaultVault_SecretStore -Name 'wsl Ubuntu user' -Secret (Get-Credential)
-Get-SecretInfo
+Get-SecretStoreConfiguration | fl
+# Scope           : CurrentUser
+# Authentication  : Password
+# PasswordTimeout : 900
+# Interaction     : Prompt
 
-# To later get the plaintext password
-(Get-Secret -Vault DefaultVault_SecretStore -Name 'wsl Ubuntu user').Password | ConvertFrom-SecureString –AsPlainText
+dir $env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\localstore
+```
 
-dir $env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry
+If you forget the password, you can reset the secret store (thus losing all stored passwords).
+```PowerShell
+Reset-SecretStore -PassThru
 ```
 
 ## Windows applications
@@ -590,6 +641,10 @@ dir $env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry
 
 ***End of 'Settings pertaining to user profile'***
 
+## PowerToys
+
+https://github.com/microsoft/PowerToys
+
 ## Sysinternals
 
 https://download.sysinternals.com/files/SysinternalsSuite.zip
@@ -597,6 +652,7 @@ https://download.sysinternals.com/files/SysinternalsSuite.zip
 Extract to c:\app\bin
 
 ### Win-R (Run)
+
 ```PowerShell
 explorer.exe /select,c:\app\bin\procexp64.exe
 ```
@@ -606,6 +662,7 @@ Right-click on `procexp64.exe`
 Pin to Start
 
 ## WSL2 (optional)
+
 ```PowerShell
 wsl --help
 wsl --status
@@ -614,7 +671,32 @@ wsl --install
 ```
 ### Win-X -> Terminal -> Ubuntu
 
-Pick a strong user password. Keep it in Notepad, unsaved, for now
+***Choose a strong password*** ... ***Save it somewhere.***
+
+Or 
+In the past, I would keep it in Notepad, unsaved, temporarily. But I can no longer recommend
+that method because Notepad now does AI, so I have no idea where its going.
+
+### Add the secret for the Ubuntu user password.
+
+### Win-X -> Terminal -> PowerShell 7
+```PowerShell
+Install-Module -Name Microsoft.PowerShell.SecretStore
+
+# This will ask for a username and password, but the username doesn't matter.
+Set-Secret -Vault SecretStore -Name 'wsl Ubuntu user' -Secret (Get-Credential)
+Get-SecretInfo
+```
+
+### To later retrieve the plaintext password
+```PowerShell
+Install-Module -Name Microsoft.PowerShell.SecretStore
+(Get-Secret -Vault SecretStore -Name 'wsl Ubuntu user').Password | ConvertFrom-SecureString –AsPlainText
+```
+
+### Open a WSL2 prompt
+
+This is likely called "Ubuntu" in your defined terminal window sessions.
 
 ```Bash
 touch $HOME/.hushlogin
@@ -624,72 +706,33 @@ sudo sh -c 'apt update && apt upgrade -y'
 
 The rest of the set up Ubuntu belongs in another document.
 
-### SecretStore SecretVault for storing the WSL2 Ubuntu user password
-
-### Win-X -> Terminal -> PowerShell 7
-```
-Find-Module -Name Microsoft.PowerShell.SecretStore
-
-# Version Name                             Repository Description
-# ------- ----                             ---------- -----------
-# 1.0.6   Microsoft.PowerShell.SecretStore PSGallery  This PowerShell module is an extension v…
-```
-
-```
-Install-Module -Name Microsoft.PowerShell.SecretStore
-
-Register-SecretVault -Name DefaultVault_SecretStore -ModuleName Microsoft.PowerShell.SecretStore -DefaultVault
-
-Get-SecretVault -Name DefaultVault_SecretStore | fl
-```
-Actually create the SecretStore vault. This should ask for a password.
-
-Choose a strong one, as it's not clear what password hashing function, work factor,
-or anti-hammering protection is applied.
-```
-Get-SecretStoreConfiguration
-```
-Add the secret for the Ubuntu user password.
-
-This should ask for a username and password, but I don't think the username actually matters.
-```PowerShell
-Set-Secret -Vault DefaultVault_SecretStore -Name 'wsl Ubuntu user' -Secret (Get-Credential)
-Get-SecretInfo
-```
-
-### To later retrieve the plaintext password
-```PowerShell
-(Get-Secret -Vault DefaultVault_SecretStore -Name 'wsl Ubuntu user').Password | ConvertFrom-SecureString –AsPlainText
-
-dir $env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry
-```
-
 ## After basic apps are installed
 
 ### Win-X -> System -> Advanced System Settings -> Advanced tab -> [click] Environment Variables
 
 **IMPORTANT**: Modifying the Registry will mess up your system.
 
-I choose to be bold and take risks here.
+I personally choose to be bold and take risks, especially with a new system that has no
+critical data on it.
 
-Move a bunch of junk from Path to Path-not
+#### Move a bunch of junk from Path to Path-not
 
-* Not having LOCALAPPDATA\Microsoft\WindowsApps in Path had the effect of breaking the default
-terminal profile for WSL2 Ubuntu, which specifies the command line as simply 'ubuntu.exe'. Adjusting
-the profile to refer to %LOCALAPPDATA%\Microsoft\WindowsApps\ubuntu.exe instead seems to have
+* Not having `%LOCALAPPDATA%\Microsoft\WindowsApps` in Path had the effect of breaking the default
+terminal profile for WSL2 Ubuntu, which specifies the command line as simply `ubuntu.exe`. Adjusting
+the profile to refer to `%LOCALAPPDATA%\Microsoft\WindowsApps\ubuntu.exe` seems to have
 fixed it.
 
 Result:
 
 ### System Variables
 ```
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+    Path    REG_EXPAND_SZ    %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SystemRoot%\System32\OpenSSH;C:\Program Files\PowerShell\7\
+
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path-not
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
     Path-not    REG_EXPAND_SZ    %SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
-
-reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
-    Path    REG_EXPAND_SZ    %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\OpenSSH\;
 ```
 
 ### User variables
@@ -700,9 +743,19 @@ HKEY_CURRENT_USER\Environment
 
 reg query HKCU\Environment /v Path-not2
 HKEY_CURRENT_USER\Environment
-    Path-not2    REG_EXPAND_SZ    %USERPROFILE%\AppData\Local\Microsoft\WindowsApps;
+    Path-not2    REG_EXPAND_SZ    %USERPROFILE%\AppData\Local\Microsoft\WindowsApps
 ```
 
 ## Other stuff
 
 ### Install local printers
+
+### Set up an SSH user key (Optional)
+
+See [40 SSH user key](./40_ssh_user_key.md).
+
+### Set up dev environment stuff (Optional)
+
+See [Dev Environment Set Up](./50_dev_env_set_up.md).
+
+
