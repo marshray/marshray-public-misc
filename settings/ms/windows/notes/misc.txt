@@ -1,0 +1,5 @@
+
+
+Edge 'browse as guest' shortcut.
+"%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" -guest
+

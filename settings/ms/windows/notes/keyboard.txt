@@ -1,0 +1,49 @@
+
+win-shift-` Open FancyZones layout editor
+win-leftarrow Move window to previous zone
+win-rightarrow Move window to next zone
+win-PgDn    Next window in the current zone
+win-PgUp    Previous window in the current zone
+win-shift-/ Shortcut guide (i.e., win-?)
+win-shift-c color picker
+win-ctrl-alt-v paste as plain text
+win-ctrl-shift-r "reparent" Crop And Lock
+win-ctrl-shift-t "thumbnail" Crop And Lock
+
+alt-space   Open window menu, 'm' move
+
+
+=========================================================== PowerToys
+
+Enable
+    Awake
+    Color picker
+    FancyZones
+    Paste as plain text
+    Crop And Lock
+
+FancyZones
+    Zones
+        Zone behavior
+            [check] Show zones on all monitors while dragging a window
+    Windows
+        Window behavior
+            [check] Disable round corners when window is snapped
+        [On] Override Windows snap
+
+
+
+Disable
+    Run - it wants the 'Alt-space' keyboard used to open window menu and doesn't seem useful
+    Peek - it wants the 'Alt-space' keyboard used to open window menu and doesn't seem useful
+    Hosts file editor
+    Keyboard manager
+    Mouse jump
+    Screen Ruler
+    Image resizer
+    Mouse highlighter
+    Mouse without borders
+    Quick accent
+    Text extractor
+    Mouse pointer crosshairs
+
