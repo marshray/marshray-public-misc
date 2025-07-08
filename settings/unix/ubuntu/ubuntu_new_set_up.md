@@ -330,9 +330,24 @@ Edit `ExecStart` line:
 ExecStart=-/sbin/agetty --autologin someuser --noclear %I $TERM
 ```
 
-##
+## Create new user
 
 ```sh
+pwgen -B 12
+```
+
+Use the output for inspiration.
+
+```sh
+sudo adduser `newusername`
+```
+
+```sh
+# login as new user
+cd ~
+(umask 0133; touch ~/.hushlogin)
+ll
+chmod -R go-rwx ~
 ```
 
 ##
