@@ -132,12 +132,6 @@ apt upgrade -y
 apt install iputils-arping net-tools gnupg vim
 ```
 
-On older x86_64 Ubuntu the i386 architecture was supported for compatibility. Here's how to remove it:
-
-```sh
-sudo dpkg --remove-architecture i386
-```
-
 ## More favorite packages
 
 ```sh
@@ -146,17 +140,79 @@ sudo apt install bing git gitk git-doc htop sqlite3 sqlite3-doc sqlite3-tools tm
 
 ## Basic customization
 
+### Hushlogin
+
 ```sh
 # As user
-(umask 0177; touch ~/.hushlogin)
-sudo sh -c 'umask 0133; touch /root/.hushlogin /etc/skel/.hushlogin'
+(umask 0133; touch ~/.hushlogin)
+sudo sh -c 'umask 0133; touch /etc/hushlogins /etc/skel/.hushlogin /root/.hushlogin'
 ```
+
+## Consider disabling IPv6 on external network adapters
+
+### List network adapters
+
+```sh
+ls /proc/sys/net/ipv6/conf | grep -vP '(all|default|lo)'
+```
+
+### Disable IPv6 temporarily
+
+```sh
+sudo sh <<'EOF' | cat -t
+set -x
+for iface in $( ls /proc/sys/net/ipv6/conf | grep -vP "all|default|lo" ); do
+    sysctl net.ipv6.conf."$iface".disable_ipv6
+    sysctl -w net.ipv6.conf."$iface".disable_ipv6=1
+done
+EOF
+```
+
+### Disable IPv6 permanently
+
+```sh
+sudo sh <<'EOF' | cat -t
+umask 0133
+ls /proc/sys/net/ipv6/conf | grep -vP 'all|default|lo'
+for iface in $( ls /proc/sys/net/ipv6/conf | grep -vP 'all|default|lo' ); do
+    file=/etc/sysctl.d/05-$iface.conf
+    if [ -f "$file" ]; then
+        cp -a "$file" "$file.old"
+        printf 'vvvvvvvvvvvv %s vvvvvvvvvvvv\n' "$file.old"
+        cat -t "$file.old"
+        printf '^^^^^^^^^^^^ %s ^^^^^^^^^^^^\n' "$file.old"
+        grep -vP "^net[.]ipv6[.]conf[.]$iface[.]disable_ipv6[^.]" "$file.old" >"$file.new"
+        printf 'vvvvvvvvvvvv %s vvvvvvvvvvvv\n' "$file.new"
+        cat -t "$file.new"
+        printf '^^^^^^^^^^^^ %s ^^^^^^^^^^^^\n' "$file.new"
+        rm "$file.old"
+        mv "$file.new" "$file"
+    fi
+    printf 'net.ipv6.conf.%s.disable_ipv6 = 1\n' "$iface" >>"$file"
+    printf 'vvvvvvvvvvvv %s vvvvvvvvvvvv\n' "$file"
+    cat -t "$file"
+    printf '^^^^^^^^^^^ %s ^^^^^^^^^^^^\n\n' "$file"
+done
+systemctl restart systemd-sysctl.service
+EOF
+```
+
+## Disabling
+
+Consider:
+
+```sh
+sudo vim /etc/sysctl.conf
+```
+
+Add setting `net.ipv6.conf.all.disable_ipv6 = 1`
 
 ## SSH
 
 `man 5 ssh_config`
 
 Check out the capabilities of the current version.
+
 ```sh
 for w in `ssh -Q help`; do
     echo vvvv ssh -Q $w vvvv
@@ -172,7 +228,7 @@ done
 sudo -i
 cd /etc/ssh
 mkdir old-keys && mv ssh_host_* old-keys
-ssh-keygen -t ecdsa -b 521 -C `cat /etc/hostname` -f ssh_host_key_p521
+ssh-keygen -t ecdsa -b 521 -C $(cat /etc/hostname) -f ssh_host_key_p521
 # no passphrase
 
 cp -a sshd_config sshd_config.0
@@ -221,15 +277,6 @@ sudo vim /etc/fstab
 # comment out the line that mounts the swap file
 ```
 
-## Disabling IPv6
-
-Consider:
-
-```sh
-sudo vim /etc/sysctl.conf
-```
-Add setting `net.ipv6.conf.all.disable_ipv6 = 1`
-
 ## Reboot
 
 ```sh
@@ -238,7 +285,7 @@ sudo shutdown -r now
 
 ## Sudoers
 
-I prefer some changes to sudoers:
+I prefer some changes to sudoers. They are not necessarily apropriate for your situation.
 
 ```sh
 sudo visudo
@@ -269,7 +316,7 @@ Save and quit: `q` `q` `y`
 
 ## Automatic login to graphical desktop
 
-### ***NOTE*** -- I haven't tested this in many releases.
+### ***NOTE*** -- I haven't tested this for many releases.
 
 Consider:
 
@@ -283,18 +330,17 @@ Edit `ExecStart` line:
 ExecStart=-/sbin/agetty --autologin someuser --noclear %I $TERM
 ```
 
-## 
+##
 
 ```sh
 ```
 
-## 
+##
 
 ```sh
 ```
 
 ## As regular user
-
 
 ## Removing unneeded packages
 
@@ -302,27 +348,27 @@ ExecStart=-/sbin/agetty --autologin someuser --noclear %I $TERM
 sudo apt autoremove -y
 ```
 
-## 
+##
 
 ```sh
 ```
 
-## 
+##
 
 ```sh
 ```
 
-## 
+##
 
 ```sh
 ```
 
-## 
+##
 
 ```sh
 ```
 
-## 
+##
 
 ```sh
 ```
